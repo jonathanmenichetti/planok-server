@@ -21,7 +21,7 @@ class TaskController extends Controller
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
                 'category' => 'nullable|string|max:100',
-                'completed' => 'nullable|boolean',
+                'status' => 'nullable|boolean',
             ]);
 
             // Create the task
@@ -29,7 +29,7 @@ class TaskController extends Controller
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
                 'category' => $request->input('category'),
-                'completed' => $request->input('completed', false),
+                'status' => $request->input('status', false),
             ]);
 
             return response()->json(['message' => 'Task created successfully'], 201);

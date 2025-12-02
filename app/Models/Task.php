@@ -15,7 +15,7 @@ class Task extends Model
         'title',
         'description',
         'category',
-        'completed',
+        'status',
     ];
 
     /**

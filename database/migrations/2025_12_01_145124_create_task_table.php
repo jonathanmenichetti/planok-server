@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->boolean('completed')->default(false);
+            $table->enum('status', ['pending', 'completed'])->default('pending');
             $table->string('category')->nullable();
             $table->timestamps();
         });
