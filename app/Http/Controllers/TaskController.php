@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
@@ -13,7 +15,36 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        // Logic to create a new task
+        try {
+            // Validate the request data
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'category' => 'nullable|string|max:100',
+                'completed' => 'nullable|boolean',
+            ]);
+
+            // Create the task
+            Task::create([
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'category' => $request->input('category'),
+                'completed' => $request->input('completed', false),
+            ]);
+
+            return response()->json(['message' => 'Task created successfully'], 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            logger('Error storing task', ['error' => $e->getMessage()]);
+            return response()->json([
+                'message' => 'An error occurred while creating the task',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function show($id)
