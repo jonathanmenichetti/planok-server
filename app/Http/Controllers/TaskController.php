@@ -21,7 +21,12 @@ class TaskController extends Controller
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
                 'category' => 'nullable|string|max:100',
-                'status' => 'required|string|in:pending,completed',
+                'status' => 'nullable|string|in:pending,completed',
+            ]);
+
+            // Set default status if not provided
+            $request->merge([
+                'status' => $request->input('status', 'pending'),
             ]);
 
             // Create the task
