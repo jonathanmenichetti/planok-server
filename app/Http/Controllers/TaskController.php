@@ -10,7 +10,8 @@ class TaskController extends Controller
 {
     public function index()
     {
-        return response()->json(['message' => 'List of tasks']);
+        $tasks = Task::all();
+        return response()->json($tasks);
     }
 
     public function store(Request $request)
@@ -20,7 +21,6 @@ class TaskController extends Controller
             $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'category' => 'nullable|string|max:100',
                 'status' => 'nullable|string|in:pending,completed',
             ]);
 
@@ -33,7 +33,6 @@ class TaskController extends Controller
             Task::create([
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
-                'category' => $request->input('category'),
                 'status' => $request->input('status', false),
             ]);
 
