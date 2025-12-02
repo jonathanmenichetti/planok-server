@@ -56,14 +56,39 @@ class TaskController extends Controller
         }
     }
 
-    public function show($id)
-    {
-
-    }
-
     public function update(Request $request, $id)
     {
-        // Logic to update a specific task
+        try {
+            $task = Task::findOrFail($id);
+
+            // Validate the request data
+            $request->validate([
+                'title' => 'sometimes|required|string|max:255',
+                'description' => 'sometimes|nullable|string',
+                'status' => 'sometimes|nullable|string|in:pending,completed',
+            ]);
+
+            // Update the task
+            $task->update($request->only(['title', 'description', 'status']));
+
+            return response()->json([
+                'message' => 'Task updated successfully',
+                'data' => [
+                    'task' => $task,
+                ],
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            logger('Error updating task', ['error' => $e->getMessage()]);
+            return response()->json([
+                'message' => 'An error occurred while updating the task',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy($id)
