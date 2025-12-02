@@ -21,7 +21,7 @@ class TaskController extends Controller
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
                 'category' => 'nullable|string|max:100',
-                'status' => 'nullable|boolean',
+                'status' => 'required|string|in:pending,completed',
             ]);
 
             // Create the task
