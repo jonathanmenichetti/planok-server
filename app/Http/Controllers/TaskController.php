@@ -36,7 +36,12 @@ class TaskController extends Controller
                 'status' => $request->input('status', false),
             ]);
 
-            return response()->json(['message' => 'Task created successfully'], 201);
+            return response()->json([
+                'message' => 'Task created successfully',
+                'data' => [
+                    'task' => Task::latest()->first(),
+                ],
+            ], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
@@ -53,7 +58,7 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        // Logic to show a specific task
+
     }
 
     public function update(Request $request, $id)
